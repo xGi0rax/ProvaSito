@@ -1,0 +1,81 @@
+/* ===== Base e colori ===== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root{
+  --bg:#0f172a; --panel:#111827; --text:#e5e7eb; --text-strong:#fff;
+  --border:#1f2937; --accent:#60a5fa; --muted:#9ca3af; --radius:.6rem;
+}
+body{
+  font-family: system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+  line-height:1.5; background:var(--bg); color:var(--text);
+}
+.container{ width:min(92vw,70rem); margin:0 auto; padding:1rem; }
+.section{ padding:1.5rem 0; border-top:1px solid var(--border); }
+.section h2{ color:var(--text-strong); margin-bottom:.6rem; }
+.section h3{ margin-top:1rem; color:var(--text-strong); font-size:1.1rem; }
+
+/* ===== Header ===== */
+.header{ background:var(--panel); border-bottom:1px solid var(--border); position:sticky; top:0; z-index:10; }
+.header-row{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; }
+.brand{ display:flex; align-items:center; gap:.5rem; font-weight:700; color:var(--text-strong); text-decoration:none; }
+.brand-logo{ width:38px; height:38px; border-radius:50%; }
+
+/* ===== Navigazione ===== */
+.nav{ display:flex; gap:.5rem; flex-wrap:wrap; }
+.nav a{
+  text-decoration:none; color:var(--text);
+  padding:.4rem .7rem; border:1px solid var(--border);
+  border-radius:var(--radius); background:var(--panel);
+  transition:border-color .2s ease, color .2s ease;
+}
+.nav a:hover{ border-color:var(--accent); color:var(--accent); }
+
+/* ===== Hero ===== */
+.hero{ text-align:center; padding-block:2rem; border-bottom:1px solid var(--border); }
+.hero-logo{ width:90px; height:90px; border-radius:50%; margin-inline:auto; box-shadow:0 2px 10px rgba(0,0,0,.4); }
+.hero h1{ color:var(--text-strong); margin-top:.8rem; }
+.subtitle{ color:var(--muted); margin:.3rem 0 1rem; }
+.btn{
+  display:inline-block; background:var(--accent); color:#000; text-decoration:none;
+  padding:.55rem 1rem; border-radius:var(--radius); font-weight:600;
+  border:1px solid var(--border);
+  transition:border-color .2s ease, box-shadow .2s ease;
+}
+.btn:hover{ border-color:var(--accent); box-shadow:0 0 0 2px rgba(96,165,250,.15); }
+
+/* ===== Liste documenti ===== */
+.list{ list-style:none; margin:.4rem 0 1rem; padding:0; }
+.list li{ margin:.35rem 0; }
+.list a{
+  display:block; text-decoration:none; color:var(--text);
+  background:var(--panel); border:1px solid var(--border);
+  border-radius:var(--radius); padding:.55rem .8rem;
+  transition:border-color .2s ease, color .2s ease;
+}
+.list a:hover{ border-color:var(--accent); color:var(--accent); }
+
+/* ===== Team ===== */
+.centered{text-align:center;}
+.team{
+  list-style:none; margin:1.2rem auto 0; padding:0; max-width:60rem;
+  display:grid; gap:1rem; grid-template-columns:repeat(auto-fit, minmax(16rem,1fr));
+}
+.card{
+  background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+  padding:1rem; text-align:center; box-shadow:0 2px 4px rgba(0,0,0,.25);
+}
+.card:hover{ border-color:var(--accent);}
+.card strong{ color:var(--text-strong); display:block; margin-bottom:.25rem; }
+.muted{ color:var(--muted); }
+
+.pill{
+  display:inline-block; padding:.45rem .7rem; border:1px solid var(--border);
+  border-radius:1rem; background:var(--panel); color:var(--text);
+  text-decoration:none; transition:border-color .2s ease, color .2s ease;
+}
+.pill:hover{ border-color:var(--accent); color:var(--accent); }
+
+/* ===== Footer ===== */
+.footer{
+  background:var(--panel); border-top:1px solid var(--border);
+  text-align:center; color:var(--muted); padding:.6rem 0;
+}
