@@ -6,7 +6,8 @@ from datetime import datetime
 from pathlib import Path
 from bs4 import BeautifulSoup
 
-SEZIONI = ["candidatura", "presentazione"]
+# SOLO candidatura per ora
+SEZIONI = ["candidatura"]
 TIPI = ["documenti", "verbali"]
 AMBITI = ["interni", "esterni"]
 
@@ -23,8 +24,8 @@ def collect_entries(root: Path, base_url: str):
         for f in files:
             if not f.lower().endswith(".pdf"):
                 continue
-            full = Path(dirpath) | Path(f)
-            rel = full.relative_to(root)  # es. candidatura/verbali/interni/VI-...pdf
+            full = Path(dirpath) / f
+            rel = full.relative_to(root)  # es: candidatura/verbali/interni/VI-..pdf
             parts = rel.parts
             if len(parts) < 4:
                 continue
@@ -63,6 +64,7 @@ def replace_between_markers(html: str, block_id: str, new_content: str) -> str:
         stop  = html.index(end)
         return html[:start] + "\n" + new_content + "\n" + html[stop:]
 
+    # fallback: <ul id="autolist-<block_id>"></ul>
     soup = BeautifulSoup(html, "html.parser")
     container = soup.find(id=f"autolist-{block_id}")
     if container:
@@ -93,9 +95,9 @@ def update_index(index_path: Path, entries):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--root", required=True, help="documenti/cartella_con_documenti")
+    ap.add_argument("--root", required=True, help="documenti")
     ap.add_argument("--index", required=True, help="index.html")
-    ap.add_argument("--base-url", required=True, help="/documenti/cartella_con_documenti")
+    ap.add_argument("--base-url", required=True, help="/documenti")
     ap.add_argument("--manifest", required=True, help="data/manifest.json")
     args = ap.parse_args()
 
