@@ -24,10 +24,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Tectonic (fast LaTeX engine)
+      # ⬇️ Installa Tectonic scaricando il binario dal release ufficiale
+      - name: Install Tectonic (download release binary)
+        shell: bash
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends tectonic
+          set -eux
+          ARCH="$(uname -m)"
+          case "$ARCH" in
+            x86_64)  TARBALL="tectonic-x86_64-unknown-linux-gnu.tar.gz" ;;
+            aarch64) TARBALL="tectonic-aarch64-unknown-linux-gnu.tar.gz" ;;
+            *) echo "Arch non supportata: $ARCH" && exit 1 ;;
+          esac
+          curl -L "https://github.com/tectonic-typesetting/tectonic/releases/latest/download/${TARBALL}" -o tt.tgz
+          tar -xzf tt.tgz
+          # sposta il binario in PATH (la cartella estratta inizia con 'tectonic-')
+          sudo mv tectonic-*/tectonic /usr/local/bin/tectonic
+          tectonic --version
 
       - name: Compile all .tex under documenti/candidatura
         shell: bash
