@@ -6,12 +6,10 @@ from datetime import datetime
 from pathlib import Path
 from bs4 import BeautifulSoup
 
-# tassonomia attesa
 SEZIONI = ["candidatura", "presentazione"]
 TIPI = ["documenti", "verbali"]
 AMBITI = ["interni", "esterni"]
 
-# id dei blocchi = "<sezione>-<tipo>-<ambito>"
 def section_id(sezione, tipo, ambito):
     return f"{sezione}-{tipo}-{ambito}"
 
@@ -25,18 +23,16 @@ def collect_entries(root: Path, base_url: str):
         for f in files:
             if not f.lower().endswith(".pdf"):
                 continue
-            full = Path(dirpath) / f
-            rel = full.relative_to(root)  # p.es. candidatura/verbali/interni/VI-....pdf
+            full = Path(dirpath) | Path(f)
+            rel = full.relative_to(root)  # es. candidatura/verbali/interni/VI-...pdf
             parts = rel.parts
             if len(parts) < 4:
                 continue
             sezione, tipo, ambito = parts[0], parts[1], parts[2]
             if sezione not in SEZIONI or tipo not in TIPI or ambito not in AMBITI:
                 continue
-
             url = f"{base_url.rstrip('/')}/" + rel.as_posix()
             mtime = datetime.fromtimestamp(full.stat().st_mtime)
-
             entries.append({
                 "label": humanize(f),
                 "path": rel.as_posix(),
@@ -47,20 +43,17 @@ def collect_entries(root: Path, base_url: str):
                 "date": mtime.strftime("%Y-%m-%d"),
                 "timestamp": int(mtime.timestamp()),
             })
-    # ordina per gruppo, poi data desc
     entries.sort(key=lambda e: (e["sezione"], e["tipo"], e["ambito"], -e["timestamp"]))
     return entries
 
 def build_ul_inner(entries_for_group):
     if not entries_for_group:
         return "<li>Nessun documento trovato per questa sezione.</li>"
-    items = []
-    for e in entries_for_group:
-        items.append(
-            f'<li><a href="{e["url"]}">{e["label"]}</a>'
-            f' <span class="doc-date" style="opacity:.7;margin-left:.5rem;">{e["date"]}</span></li>'
-        )
-    return "\n".join(items)
+    return "\n".join(
+        f'<li><a href="{e["url"]}">{e["label"]}</a>'
+        f' <span class="doc-date" style="opacity:.7;margin-left:.5rem;">{e["date"]}</span></li>'
+        for e in entries_for_group
+    )
 
 def replace_between_markers(html: str, block_id: str, new_content: str) -> str:
     begin = f"<!-- AUTO-GEN:BEGIN {block_id} -->"
@@ -70,7 +63,6 @@ def replace_between_markers(html: str, block_id: str, new_content: str) -> str:
         stop  = html.index(end)
         return html[:start] + "\n" + new_content + "\n" + html[stop:]
 
-    # fallback: <ul id="autolist-<block_id>">...</ul>
     soup = BeautifulSoup(html, "html.parser")
     container = soup.find(id=f"autolist-{block_id}")
     if container:
@@ -80,18 +72,15 @@ def replace_between_markers(html: str, block_id: str, new_content: str) -> str:
             container.append(child)
         return str(soup)
 
-    return html  # nessuna modifica
+    return html
 
 def update_index(index_path: Path, entries):
-    # raggruppa
     grouped = {}
     for e in entries:
-        k = (e["sezione"], e["tipo"], e["ambito"])
-        grouped.setdefault(k, []).append(e)
+        grouped.setdefault((e["sezione"], e["tipo"], e["ambito"]), []).append(e)
 
     html = index_path.read_text(encoding="utf-8")
 
-    # garantisci che tutte le 8 liste vengano toccate (anche se vuote)
     for sezione in SEZIONI:
         for tipo in TIPI:
             for ambito in AMBITI:
@@ -104,21 +93,18 @@ def update_index(index_path: Path, entries):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--root", required=True, help="Radice documenti (es. documenti/cartella_con_documenti)")
-    ap.add_argument("--index", required=True, help="Percorso a index.html")
-    ap.add_argument("--base-url", required=True, help="Prefisso URL per i link")
-    ap.add_argument("--manifest", required=True, help="Dove scrivere il manifest json")
+    ap.add_argument("--root", required=True, help="documenti/cartella_con_documenti")
+    ap.add_argument("--index", required=True, help="index.html")
+    ap.add_argument("--base-url", required=True, help="/documenti/cartella_con_documenti")
+    ap.add_argument("--manifest", required=True, help="data/manifest.json")
     args = ap.parse_args()
 
-    root = Path(args.root)
-    entries = collect_entries(root, args.base_url)
+    entries = collect_entries(Path(args.root), args.base_url)
 
-    # manifest (utile per debug/ricerche future)
     manifest_path = Path(args.manifest)
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(json.dumps(entries, ensure_ascii=False, indent=2), encoding="utf-8")
 
-    # aggiorna html
     update_index(Path(args.index), entries)
     print("Index aggiornato.")
 
