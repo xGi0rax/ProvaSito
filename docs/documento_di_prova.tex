@@ -1,0 +1,33 @@
+\documentclass{report} % Classe del documento che creiamo. "article" per documenti normali, "beamer" per slides, "report" per usare i capitoli
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+
+\title{Il mio primo documento} % Titolo del documenti
+\author{Giacomo Giora} % Autore
+\date{15 Ottobre 2025} 
+
+\begin{document} % Inizio corpo del testo
+
+\maketitle % Stampo il titolo nel documento
+\tableofcontents % Stampo l'indice dei capitoli
+
+\chapter{Primo capitolo} % Creo un capitolo
+\section{Sezione 1} % Con le sue sottosezioni
+\section{Sezione 2}
+\subsection{Sotto sezione 1} % Sotto sezioni ulteriori
+\subsubsection{Sotto sotto sezione} % Sotto sottosezione ulteriore (non compaiono nell'indice e non hanno numerazione)
+\paragraph{Sotto sezione paragrafo} % Simile alle sotto sotto sezioni
+\subsection{Sotto sezione 2}
+
+\section{Sezione 3}
+\begin{itemize} % Elenco puntato "itemize", "enumerate" elenco numerato
+    \item Punto 1 % elemento di un elenco
+    \item mela
+    \item pera
+\end{itemize}
+
+\chapter{Secondo capitolo}
+
+% \section{Introduzione}
+
+\end{document}
