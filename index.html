@@ -32,16 +32,6 @@
       <p class="subtitle">Sito del progetto di <strong>Ingegneria del Software 2025/2026</strong></p>
       <a class="btn" href="https://github.com/AtlasTeam9" target="_blank" rel="noopener">Repository GitHub</a>
     </section>
-
-    <section id="documenti">
-      <h2>Documenti disponibili</h2>
-      <!-- PDF_LIST_START -->
-      <ul>
-        <li><a href="pdf/esempio.pdf">esempio.pdf</a></li>
-      </ul>
-      <!-- PDF_LIST_END -->
-    </section>
-
     
     <!-- CANDIDATURA -->
     <section id="candidatura" class="section">
@@ -114,9 +104,29 @@
 
   <footer class="footer">
     <div class="container">
-      <small>© 2025–2026 Gruppo Atlas — Tutti i diritti riservati</small>
+      <small>© 2025-2026 Gruppo Atlas — Tutti i diritti riservati</small>
     </div>
   </footer>
+  <button id="backToTop">
+    ⬆ Torna su
+  </button>
+  <script>
+    const btn = document.getElementById("backToTop");
+    window.onscroll = () => {
+      if (window.scrollY > 300) {
+        btn.classList.add("show");
+      } else {
+        btn.classList.remove("show");
+      }
+    };
+
+    btn.onclick = () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    };
+  </script>
 
 </body>
 </html>
