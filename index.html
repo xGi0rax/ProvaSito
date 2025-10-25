@@ -1,104 +1,53 @@
+---
+layout: null
+---
+
 <!doctype html>
 <html lang="it">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Gruppo Atlas — SWE 25/26</title>
-  <link rel="stylesheet" href="css/style.css">
+  <meta name="description" content="Sito del progetto di Ingegneria del Software 2025/2026">
+  <link rel="stylesheet" href="{{ site.baseurl }}/css/style.css?v={{ site.github.build_revision | default: site.time | date: '%s' }}">
 </head>
 <body>
 
-  <header class="header">
+  <a href="#main" class="skip-link visually-hidden">Salta al contenuto</a>
+
+  <header class="header" role="banner">
     <div class="container header-row">
-      <a href="#top" class="brand">
-        <img src="img/AtlasLogo.png" alt="Logo Atlas" class="brand-logo">
+      <a href="#top" class="brand" aria-label="Home Atlas">
+        <img src="{{ site.baseurl }}/img/AtlasLogo.png" alt="Logo Atlas" class="brand-logo" loading="lazy">
         <span>Atlas</span>
       </a>
-      <nav class="nav">
-        <a href="#candidatura">Candidatura</a>
-        <a href="#presentazione">Presentazione</a>
+      <nav class="nav" aria-label="Navigazione principale">
+        {%- for s in site.data.sections.sections -%}
+          <a href="#{{ s.id }}">{{ s.title | split: " — " | first }}</a>
+        {%- endfor -%}
         <a href="#team">Team</a>
       </nav>
     </div>
   </header>
 
-  <main id="top" class="container">
+  <main id="main" class="container">
 
-    <section class="hero">
-      <img src="img/AtlasLogo.png" alt="Logo Atlas" class="hero-logo">
+    <section id="top" class="hero">
+      <img src="{{ site.baseurl }}/img/AtlasLogo.png" alt="Logo Atlas" class="hero-logo" loading="lazy">
       <h1>Gruppo Atlas</h1>
       <p class="subtitle">Sito del progetto di <strong>Ingegneria del Software 2025/2026</strong></p>
       <a class="btn" href="https://github.com/AtlasTeam9" target="_blank" rel="noopener">Repository GitHub</a>
     </section>
-    
-    <section id="candidatura" class="section">
-      <h2>Candidatura</h2>
 
-      <h3>Documenti — Interni</h3>
-      <ul class="list">
-        <!-- AUTO-GEN:BEGIN candidatura-documenti-interni -->
-        <li>Nessun documento trovato per questa sezione.</li>
-        <!-- AUTO-GEN:END candidatura-documenti-interni -->
-      </ul>
-
-      <h3>Documenti — Esterni</h3>
-      <ul class="list">
-        <!-- AUTO-GEN:BEGIN candidatura-documenti-esterni -->
-        <li>Nessun documento trovato per questa sezione.</li>
-        <!-- AUTO-GEN:END candidatura-documenti-esterni -->
-      </ul>
-
-      <h3>Verbali — Interni</h3>
-      <ul class="list">
-        <!-- AUTO-GEN:BEGIN candidatura-verbali-interni -->
-        <li>Nessun documento trovato per questa sezione.</li>
-        <!-- AUTO-GEN:END candidatura-verbali-interni -->
-      </ul>
-
-      <h3>Verbali — Esterni</h3>
-      <ul class="list">
-        <!-- AUTO-GEN:BEGIN candidatura-verbali-esterni -->
-        <li>Nessun documento trovato per questa sezione.</li>
-        <!-- AUTO-GEN:END candidatura-verbali-esterni -->
-      </ul>
-    </section>
-
-    <section id="presentazione" class="section">
-      <h2>Presentazione & Comunicazioni</h2>
-
-      <h3>Documenti — Interni</h3>
-      <ul class="list">
-        <!-- AUTO-GEN:BEGIN presentazione-documenti-interni -->
-        <li>Nessun documento trovato per questa sezione.</li>
-        <!-- AUTO-GEN:END presentazione-documenti-interni -->
-      </ul>
-
-      <h3>Documenti — Esterni</h3>
-      <ul class="list">
-        <!-- AUTO-GEN:BEGIN presentazione-documenti-esterni -->
-        <li>Nessun documento trovato per questa sezione.</li>
-        <!-- AUTO-GEN:END presentazione-documenti-esterni -->
-      </ul>
-
-      <h3>Verbali — Interni</h3>
-      <ul class="list">
-        <!-- AUTO-GEN:BEGIN presentazione-verbali-interni -->
-        <li>Nessun documento trovato per questa sezione.</li>
-        <!-- AUTO-GEN:END presentazione-verbali-interni -->
-      </ul>
-
-      <h3>Verbali — Esterni</h3>
-      <ul class="list">
-        <!-- AUTO-GEN:BEGIN presentazione-verbali-esterni -->
-        <li>Nessun documento trovato per questa sezione.</li>
-        <!-- AUTO-GEN:END presentazione-verbali-esterni -->
-      </ul>
-    </section>
+    {%- comment -%} Genera le sezioni in ordine da _data/sections.yml {%- endcomment -%}
+    {%- for s in site.data.sections.sections -%}
+      {% include section.html section=s %}
+    {%- endfor -%}
 
     <section id="team" class="section">
       <h2 class="centered">Team</h2>
       <ul class="team">
-        <li class="card"><strong>Nome Cognome</strong><span class="muted">Matricola: 20xxxxxx</span></li>
+        <li class="card"><strong>Riccardo Valerio</strong><span class="muted">Matricola: 2075517</span></li>
         <li class="card"><strong>Nome Cognome</strong><span class="muted">Matricola: 20xxxxxx</span></li>
         <li class="card"><strong>Nome Cognome</strong><span class="muted">Matricola: 20xxxxxx</span></li>
         <li class="card"><strong>Nome Cognome</strong><span class="muted">Matricola: 20xxxxxx</span></li>
@@ -108,16 +57,17 @@
       </ul>
 
       <h3 class="centered">Contatti</h3>
-      <p class="centered"><a class="pill" href="mailto:team9.atlas@gmail.com">team9.atlas@gmail.com</a></p>
+      <p class="centered">
+        <a class="pill" href="mailto:team9.atlas@gmail.com">team9.atlas@gmail.com</a>
+      </p>
     </section>
 
   </main>
 
   <footer class="footer">
     <div class="container">
-      <small>© 2025-2026 Gruppo Atlas — Tutti i diritti riservati</small>
+      <small>© 2025–2026 Gruppo Atlas — Tutti i diritti riservati</small>
     </div>
   </footer>
-
 </body>
 </html>
