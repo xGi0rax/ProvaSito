@@ -1,7 +1,12 @@
 name: Deploy Pages
 on:
+  # Attivato da un push manuale (es. modifiche al layout del sito)
   push:
     branches: [ "main" ]
+  
+  # Attivato da un segnale esterno (il bot di ProvaDocumenti)
+  repository_dispatch:
+    types: [docs-updated] # Un nome che useremo come "segnale segreto"
 permissions:
   contents: read
   pages: write
