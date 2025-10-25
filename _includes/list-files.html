@@ -1,0 +1,31 @@
+{%- comment -%}
+Genera <ul class="file-list"> con i file dentro include.dir
+Usa include.exts = "pdf,md" (di default solo "pdf")
+Compatibile con GitHub Pages (Jekyll 3.x, Liquid classico)
+{%- endcomment -%}
+
+{%- assign dir  = include.dir  | default: "" -%}
+{%- assign exts = include.exts | default: "pdf" | downcase | split: "," -%}
+
+{%- comment -%} Prendi i file statici che hanno il path dentro dir {%- endcomment -%}
+{%- assign cand = site.static_files | where_exp: "f", "f.path contains dir" | sort: "path" -%}
+
+{%- assign any = false -%}
+{%- for f in cand -%}
+  {%- assign ext = f.extname | remove: "." | downcase -%}
+  {%- if exts contains ext -%}
+    {%- assign any = true -%}{%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if any -%}
+<ul class="file-list">
+  {%- for f in cand -%}
+    {%- assign ext = f.extname | remove: "." | downcase -%}
+    {%- if exts contains ext -%}
+      {%- assign filename = f.path | split: "/" | last -%}
+      <li><a href="{{ site.baseurl }}{{ f.path }}" target="_blank" rel="noopener">{{ filename }}</a></li>
+    {%- endif -%}
+  {%- endfor -%}
+</ul>
+{%- endif -%}
